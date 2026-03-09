@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.StackPane?>
+
+<GridPane fx:id="board" alignment="CENTER" style="-fx-background-color: #06402B;"
+          xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.chessclient.ChessController">
+</GridPane>
