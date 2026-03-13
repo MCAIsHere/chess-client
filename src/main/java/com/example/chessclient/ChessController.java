@@ -12,6 +12,7 @@ import java.util.List;
 
 public class ChessController {
     // 0 - white; 1 - black;
+    private int contollerId;
     private ChessClient chessClient;
     private Referee referee;
 
@@ -37,7 +38,7 @@ public class ChessController {
                 else square.setStyle("-fx-background-color: black;");
 
                 final int r = row, c = col;
-                square.setOnMouseClicked(event -> {SquareClick(r, c);});
+                square.setOnMouseClicked(event -> {squareClick(r, c);});
 
                 board.add(square, col, row);
                 squares[row][col] = square;
@@ -55,6 +56,7 @@ public class ChessController {
         squares[row][col].getChildren().add(view);
     }
     public void setPieces(int id){
+        this.contollerId = id;
         String[] white_row = {"wr.png","wn.png","wb.png","wq.png","wk.png","wb.png","wn.png","wr.png"};
         String[] black_row = {"br.png","bn.png","bb.png","bq.png","bk.png","bb.png","bn.png","br.png"};
         if (id == 0){
@@ -82,8 +84,45 @@ public class ChessController {
         this.referee = referee;
     }
 
-    private void SquareClick(int r, int c){
-        if (r == row_clicked && c == col_clicked){
+    private void highlightSquare(int r, int c){
+        if ((r + c) % 2 == 0) squares[r][c].setStyle("-fx-background-color: orange;");
+        else squares[r][c].setStyle("-fx-background-color: red;");
+    }
+    private void unhighlightSquare(int r, int c){
+        if ((r + c) % 2 == 0) squares[r][c].setStyle("-fx-background-color: white;");
+        else squares[r][c].setStyle("-fx-background-color: black;");
+    }
+
+    private void squareClick(int r, int c){
+        Piece clickedPiece = referee.getBoard()[r][c];
+
+        if (this.row_clicked == -1) {
+            if (clickedPiece == null) return;
+            if (clickedPiece.getColor() != referee.getTurn()) {
+                System.out.println("Not your turn");
+                return;
+            }
+            if (clickedPiece.getColor() != contollerId) {
+                System.out.println("Not your piece");
+                return;
+            }
+
+            this.row_clicked = r;
+            this.col_clicked = c;
+            this.squaresHighlighted = referee.getVisibleSquares(r,c,this.contollerId);
+
+            for (Pair<Integer,Integer> square_cord : this.squaresHighlighted){
+                highlightSquare(square_cord.getKey(), square_cord.getValue());
+            }
+        }else if (this.row_clicked == r && this.col_clicked == c){
+            this.row_clicked = -1;
+            this.col_clicked = -1;
+
+            for (Pair<Integer,Integer> square_cord : this.squaresHighlighted){
+                unhighlightSquare(square_cord.getKey(), square_cord.getValue());
+            }
+            this.squaresHighlighted = null;
+        }else{
 
         }
     }

@@ -11,7 +11,7 @@ import java.io.IOException;
 public class ChessApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        Referee referee = new Referee();
+        Referee referee = Referee.getInstance();
 
         Stage stageWhite;
         FXMLLoader loader_white = new FXMLLoader(ChessApplication.class.getResource("board.fxml"));
